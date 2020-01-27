@@ -100,6 +100,8 @@ type Application struct {
 	UpgradeCmd UpgradeCmd
 	// StatusCmd displays cluster status
 	StatusCmd StatusCmd
+	// StatusHistoryCmd displays the cluster status history
+	StatusHistoryCmd StatusHistoryCmd
 	// StatusResetCmd resets the cluster to active state
 	StatusResetCmd StatusResetCmd
 	// RegistryCmd allows to interact with the cluster private registry
@@ -673,6 +675,11 @@ type StatusCmd struct {
 	Seconds *int
 	// Output is output format
 	Output *constants.Format
+}
+
+// StatusHistoryCmd displays cluster status history
+type StatusHistoryCmd struct {
+	*kingpin.CmdClause
 }
 
 // StatusResetCmd resets cluster to active state
