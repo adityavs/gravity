@@ -898,7 +898,10 @@ func systemServiceUninstall(env *localenv.LocalEnvironment, pkg loc.Locator, ser
 		})
 	case !pkg.IsEmpty():
 		if pkg.Version == loc.ZeroVersion {
-			statuses, err := services.ListPackageServices()
+			statuses, err := services.ListPackageServices(systemservice.ListServiceOptions{
+				All:  true,
+				Type: systemservice.UnitTypeService,
+			})
 			if err != nil {
 				return trace.Wrap(err)
 			}
@@ -927,7 +930,10 @@ func systemServiceList(env *localenv.LocalEnvironment) error {
 	if err != nil {
 		return trace.Wrap(err)
 	}
-	statuses, err := services.ListPackageServices()
+	statuses, err := services.ListPackageServices(systemservice.ListServiceOptions{
+		All:  true,
+		Type: systemservice.UnitTypeService,
+	})
 	if err != nil {
 		return trace.Wrap(err)
 	}

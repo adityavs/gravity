@@ -231,6 +231,23 @@ type PackageServiceStatus struct {
 	Status string
 }
 
+// ListServiceOptions describes additional configuration for listing
+// services.
+// An empty value of this type is usable
+type ListServiceOptions struct {
+	// All optionally indicates whether to query all units (and not only those in memory)
+	All bool
+	// Type optionally specifies the unit type
+	Type string
+	// State optionally specifies the unit state
+	State string
+}
+
+const (
+	// UnitTypeService defines the service type of the unit file
+	UnitTypeService = "service"
+)
+
 // ServiceManager is an interface for collaborating with system
 // service managers, e.g. systemd for host packages
 type ServiceManager interface {
@@ -247,7 +264,7 @@ type ServiceManager interface {
 	DisablePackageService(pkg loc.Locator) error
 
 	// ListPackageServices lists installed package services
-	ListPackageServices() ([]PackageServiceStatus, error)
+	ListPackageServices(ListServiceOptions) ([]PackageServiceStatus, error)
 
 	// StartPackageService starts package service
 	StartPackageService(pkg loc.Locator, noBlock bool) error
