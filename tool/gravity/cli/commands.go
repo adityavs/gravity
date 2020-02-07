@@ -1080,6 +1080,8 @@ type PackExportCmd struct {
 	OpsCenterURL *string
 	// FileMask is file mask for exported package
 	FileMask *string
+	// FileLabel optionally specifies SELinux label
+	FileLabel *string
 }
 
 // PackListCmd lists packages
