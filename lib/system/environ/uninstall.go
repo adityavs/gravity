@@ -186,6 +186,8 @@ func unmountDevicemapper(printer utils.Printer, logger log.FieldLogger) error {
 	return nil
 }
 
+// FIXME: unlinkat //.gravity/packages/unpacked
+
 func removePaths(printer utils.Printer, logger log.FieldLogger, paths ...string) error {
 	var errors []error
 	// remove all files and directories gravity might have created on the system
@@ -246,8 +248,10 @@ func getStatePaths() (paths []string) {
 		paths = append(paths, stateDir)
 	}
 	paths = append(paths, state.StateLocatorPaths...)
-	if stateDir, err := state.GravityInstallDir(); err == nil {
-		paths = append(paths, stateDir)
+	if utils.Exe.WorkingDir != "" {
+		if stateDir, err := state.GravityInstallDir(); err == nil {
+			paths = append(paths, stateDir)
+		}
 	}
 	return append(paths,
 		defaults.ModulesPath,
