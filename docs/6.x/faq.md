@@ -156,3 +156,8 @@ the respective `tele build`, `gravity install` and `gravity upgrade`
 commands.
 
 See [Helm Integration](/pack/#helm-integration) for more details.
+
+## Cluster Status
+
+Gravity provides the `gravity status` command to view [Cluster Status](/cluster/#cluster-status).
+This tool can help identify issues with the Cluster.
