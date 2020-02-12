@@ -446,6 +446,9 @@ func Execute(g *Application, cmd string, extraArgs []string) (err error) {
 			Image:     *g.AppInstallCmd.Image,
 			Name:      *g.AppInstallCmd.Name,
 			Namespace: *g.AppInstallCmd.Namespace,
+			helmConfig: helmConfig{
+				TillerNamespace: *g.AppCmd.TillerNamespace,
+			},
 			valuesConfig: valuesConfig{
 				Values: *g.AppInstallCmd.Set,
 				Files:  *g.AppInstallCmd.Values,
@@ -455,15 +458,23 @@ func Execute(g *Application, cmd string, extraArgs []string) (err error) {
 				CAPath:   *g.AppInstallCmd.RegistryCA,
 				CertPath: *g.AppInstallCmd.RegistryCert,
 				KeyPath:  *g.AppInstallCmd.RegistryKey,
+				Username: *g.AppInstallCmd.RegistryUsername,
+				Password: *g.AppInstallCmd.RegistryPassword,
+				Prefix:   *g.AppInstallCmd.RegistryPrefix,
+				Insecure: *g.Insecure,
 			},
 		})
 	case g.AppListCmd.FullCommand():
 		return releaseList(localEnv,
-			*g.AppListCmd.All)
+			*g.AppListCmd.All,
+			*g.AppCmd.TillerNamespace)
 	case g.AppUpgradeCmd.FullCommand():
 		return releaseUpgrade(localEnv, releaseUpgradeConfig{
 			Release: *g.AppUpgradeCmd.Release,
 			Image:   *g.AppUpgradeCmd.Image,
+			helmConfig: helmConfig{
+				TillerNamespace: *g.AppCmd.TillerNamespace,
+			},
 			valuesConfig: valuesConfig{
 				Values: *g.AppUpgradeCmd.Set,
 				Files:  *g.AppUpgradeCmd.Values,
@@ -473,20 +484,33 @@ func Execute(g *Application, cmd string, extraArgs []string) (err error) {
 				CAPath:   *g.AppUpgradeCmd.RegistryCA,
 				CertPath: *g.AppUpgradeCmd.RegistryCert,
 				KeyPath:  *g.AppUpgradeCmd.RegistryKey,
+				Username: *g.AppInstallCmd.RegistryUsername,
+				Password: *g.AppInstallCmd.RegistryPassword,
+				Prefix:   *g.AppInstallCmd.RegistryPrefix,
+				Insecure: *g.Insecure,
 			},
 		})
 	case g.AppRollbackCmd.FullCommand():
 		return releaseRollback(localEnv, releaseRollbackConfig{
 			Release:  *g.AppRollbackCmd.Release,
 			Revision: *g.AppRollbackCmd.Revision,
+			helmConfig: helmConfig{
+				TillerNamespace: *g.AppCmd.TillerNamespace,
+			},
 		})
 	case g.AppUninstallCmd.FullCommand():
 		return releaseUninstall(localEnv, releaseUninstallConfig{
 			Release: *g.AppUninstallCmd.Release,
+			helmConfig: helmConfig{
+				TillerNamespace: *g.AppCmd.TillerNamespace,
+			},
 		})
 	case g.AppHistoryCmd.FullCommand():
 		return releaseHistory(localEnv, releaseHistoryConfig{
 			Release: *g.AppHistoryCmd.Release,
+			helmConfig: helmConfig{
+				TillerNamespace: *g.AppCmd.TillerNamespace,
+			},
 		})
 	case g.AppSyncCmd.FullCommand():
 		return appSync(localEnv, appSyncConfig{
@@ -496,6 +520,10 @@ func Execute(g *Application, cmd string, extraArgs []string) (err error) {
 				CAPath:   *g.AppSyncCmd.RegistryCA,
 				CertPath: *g.AppSyncCmd.RegistryCert,
 				KeyPath:  *g.AppSyncCmd.RegistryKey,
+				Username: *g.AppInstallCmd.RegistryUsername,
+				Password: *g.AppInstallCmd.RegistryPassword,
+				Prefix:   *g.AppInstallCmd.RegistryPrefix,
+				Insecure: *g.Insecure,
 			},
 		})
 	case g.AppSearchCmd.FullCommand():
