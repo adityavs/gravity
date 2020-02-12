@@ -231,7 +231,7 @@ func (s *systemdManager) DisablePackageService(pkg loc.Locator) error {
 
 // IsPackageServiceInstalled checks if the package service is installed
 func (s *systemdManager) IsPackageServiceInstalled(pkg loc.Locator) (bool, error) {
-	units, err := s.ListPackageServices(ListServiceOptions{})
+	units, err := s.ListPackageServices()
 	if err != nil {
 		return false, trace.Wrap(err)
 	}
@@ -244,20 +244,10 @@ func (s *systemdManager) IsPackageServiceInstalled(pkg loc.Locator) (bool, error
 }
 
 // ListPackageServices lists installed package services
-func (s *systemdManager) ListPackageServices(opts ListServiceOptions) ([]PackageServiceStatus, error) {
+func (s *systemdManager) ListPackageServices() ([]PackageServiceStatus, error) {
 	var services []PackageServiceStatus
 
-	args := []string{"list-units", "--plain", "--no-legend"}
-	if opts.All {
-		args = append(args, "--all")
-	}
-	if opts.Type != "" {
-		args = append(args, fmt.Sprintf("--type=%v", opts.Type))
-	}
-	if opts.State != "" {
-		args = append(args, fmt.Sprintf("--state=%v", opts.State))
-	}
-	out, err := invokeSystemctl()
+	out, err := invokeSystemctl("list-units", "--plain", "--no-legend")
 	if err != nil {
 		return nil, trace.Wrap(err, "failed to list-units: %v", out)
 	}
